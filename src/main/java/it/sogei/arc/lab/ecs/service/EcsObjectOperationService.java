@@ -26,9 +26,9 @@ public class EcsObjectOperationService {
 	public void putFileToStorage(MultipartFile file) {
 		try {
 			S3Client s3 = factory.getS3Client();
-			s3.putObject(S3_BUCKET, file.getName(), file.getBytes(), file.getContentType());
+			s3.putObject(S3_BUCKET, file.getOriginalFilename(), file.getBytes(), file.getContentType());
 
-			logger.info(String.format("created object [%s/%s] with content: [%s]", S3_BUCKET, file.getName(), file.getBytes()));
+			logger.info(String.format("created object [%s/%s] with content: [%s]", S3_BUCKET, file.getOriginalFilename(), file.getBytes()));
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage());
 		}

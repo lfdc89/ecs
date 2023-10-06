@@ -35,7 +35,7 @@ public class EcsObjectController {
 
 			this.service.putFileToStorage(file);
 			
-			return ResponseEntity.ok().body(new Gson().toJson("Fatto"));
+			return ResponseEntity.ok().body(new Gson().toJson("Upload complete"));
 		}
 		catch(Exception e) {
 			logger.error("{} - {}",e.getClass().getSimpleName(), e.getLocalizedMessage());
