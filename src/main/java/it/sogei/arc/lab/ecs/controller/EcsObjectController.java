@@ -1,5 +1,6 @@
 package it.sogei.arc.lab.ecs.controller;
 
+import com.emc.object.s3.bean.PutObjectResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,9 @@ public class EcsObjectController {
 			logger.info("Content-Type: {}", file.getContentType());
 			logger.info("Size: {}", file.getSize());
 
-			this.service.putFileToStorage(file);
+			PutObjectResult pores = this.service.putFileToStorage(file);
 			
-			return ResponseEntity.ok().body(new Gson().toJson("Upload complete"));
+			return ResponseEntity.ok().body(new Gson().toJson(pores));
 		}
 		catch(Exception e) {
 			logger.error("{} - {}",e.getClass().getSimpleName(), e.getLocalizedMessage());
@@ -51,6 +52,24 @@ public class EcsObjectController {
 			
 			return ResponseEntity.ok().body(new Gson().toJson(res));
 		} catch(Exception e) {
+			logger.error("{} - {}",e.getClass().getSimpleName(), e.getLocalizedMessage());
+ 			return ResponseEntity.internalServerError().body(e.getLocalizedMessage());
+		}
+	}
+	
+	@PostMapping("/uploadaws")
+	public ResponseEntity<String> uploadFileOnAWS(@RequestParam("file") MultipartFile file) {
+		try {
+			logger.info("File da caricare:");
+			logger.info("Nome: {}", file.getOriginalFilename());
+			logger.info("Content-Type: {}", file.getContentType());
+			logger.info("Size: {}", file.getSize());
+
+			this.service.putFileToStorageAWS(file);
+			
+			return ResponseEntity.ok().body(new Gson().toJson("Upload complete"));
+		}
+		catch(Exception e) {
 			logger.error("{} - {}",e.getClass().getSimpleName(), e.getLocalizedMessage());
  			return ResponseEntity.internalServerError().body(e.getLocalizedMessage());
 		}
